@@ -1,5 +1,4 @@
 const {getLocation} = require('../services/LocationApi');
-const {Country} = require('../models/Country');
 const {IpLocation} = require('../models/IpLocation');
 
 async function getLocationForIp(req, res, next) {
@@ -22,9 +21,6 @@ async function getLocationForIp(req, res, next) {
       return next();
     }
 
-    await Country.create({
-        country: response.data.country
-    });
     const longitude = response.data.loc.split(',')[0]
     const latitude = response.data.loc.split(',')[1]
     const [ipRecord, created] = await IpLocation.findOrCreate({
@@ -57,14 +53,13 @@ async function getAllIps(req, res, next) {
 }
 
 async function getAllCountries(req, res, next) {
-  const results = await Country.findAll({
-    attributes: ['country'],
-    group: ['country']
+  const records = await IpLocation.findAll({
+    attributes: ['country']
   }).then(countries =>
     countries.map(record => record.country)
-  );
+  );;
   res.status(200).send({
-    countries: results
+    countries: records
   });
   next();
 }
