@@ -28,4 +28,4 @@ IpLocation.init({
 
 sequelize.sync();
 
-module.exports = {IpLocation};
+module.exports = {IpLocation, sequelize};
